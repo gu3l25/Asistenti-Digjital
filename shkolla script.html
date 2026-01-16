@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <title>Asistenti Digjital</title>
+
+  <style>
+      body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: #07162e;
+          height: 100vh;
+      }
+
+      /* Overlay */
+      #overlay {
+          position: fixed;
+          inset: 0;
+          background: #07162e;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1; /* FIX */
+      }
+
+      /* Button New Chat */
+      #newChat {
+          position: fixed;
+          top: 15px;
+          left: 15px;
+          background: #0b2a5a;
+          color: white;
+          border: none;
+          padding: 10px 14px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          z-index: 10; /* FIX */
+      }
+
+      #newChat:hover {
+          background: #12408a;
+      }
+
+      /* Credit */
+      #credit {
+          position: fixed;
+          bottom: 10px;
+          right: 15px;
+          font-size: 12px;
+          color: #b5c7e3;
+          opacity: 0.9;
+          z-index: 10; /* FIX */
+      }
+
+      /* Chat box */
+      #chat {
+          width: 420px;
+          background: #0b1f3f;
+          padding: 15px;
+          border-radius: 10px;
+          box-sizing: border-box;
+          text-align: center;
+          color: white;
+          box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      }
+
+      #chat img {
+          max-width: 120px;
+          margin-bottom: 10px;
+          border-radius: 10px;
+      }
+
+      #messages {
+          height: 300px;
+          background: #06152d;
+          border: 1px solid #1d3f75;
+          padding: 10px;
+          overflow-y: auto;
+          margin-bottom: 10px;
+          text-align: left;
+          border-radius: 6px;
+      }
+
+      .user { color: #4da3ff; margin: 6px 0; }
+      .bot { color: #5cff9d; margin: 6px 0; }
+      .thinking { color: #aaa; font-style: italic; margin: 6px 0; }
+
+      input {
+          width: 100%;
+          padding: 8px;
+          border-radius: 6px;
+          border: none;
+          outline: none;
+          box-sizing: border-box;
+          background: #102a52;
+          color: white;
+      }
+
+      input::placeholder {
+          color: #9fb6dd;
+      }
+  </style>
+</head>
+
+<body>
+
+<button id="newChat">🔄 Bisedë e re</button>
+<div id="credit">Krijuar nga nxënësit dhe mësueset e shkollës Lasgush Poradeci</div>
+
+<div id="overlay">
+  <div id="chat">
+    <img src="242cc834-1fcc-4591-a247-4f93e174bb1b.png" alt="Logo Shkolla Lasgush Poradeci" />
+    <h3>Asistenti Digjital 🤖</h3>
+    <div id="messages"></div>
+    <input id="input" placeholder="Cfare do te dish?" autocomplete="off" />
+  </div>
+</div>
+
+<script>
+  let hapi = 0;
+
+  const input = document.getElementById("input");
+  const messages = document.getElementById("messages");
+  const newChat = document.getElementById("newChat");
+
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  newChat.onclick = () => {
+    messages.innerHTML = "";
+    hapi = 0;
+    bot("Përshëndetje! Çfarë gjuhe preferon? (Shqip)");
+  };
+
+  window.onload = () => {
+    bot("Përshëndetje! Çfarë gjuhe preferon? (Shqip)");
+  };
+
+  function bot(text) {
+    const div = document.createElement("div");
+    div.className = "bot";
+    div.innerHTML = "<b>Asistenti Digjital:</b> " + text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function user(text) {
+    const div = document.createElement("div");
+    div.className = "user";
+    div.innerHTML = "<b>Ti:</b> " + text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function eshteNgjarjeSot(text) {
+    const fjalet = ["sot","më ndodhi","me ndodhi","isha","pata","bëra","bera"];
+    return fjalet.some(f => text.toLowerCase().includes(f));
+  }
+
+  function pergjigjeSintakse(text) {
+    text = text.toLowerCase();
+    if (text.includes("kryefjala"))
+      return "Kryefjala tregon kush ose çfarë kryen veprimin. Shembull: Nxënësi lexon librin.";
+    if (text.includes("kallëzuesi") || text.includes("kallezuesi"))
+      return "Kallëzuesi tregon veprimin ose gjendjen. Shembull: Nxënësi lexon librin.";
+    if (text.includes("kundrinori"))
+      return "Kundrinori tregon mbi kë ose mbi çfarë bie veprimi.";
+    if (text.includes("fjalia"))
+      return "Fjalia është një grup fjalësh që shpreh një mendim të plotë.";
+    return "Mund të më pyesësh për kryefjalën, kallëzuesin, kundrinorin ose fjalinë 😊";
+  }
+
+  function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    user(text);
+    input.value = "";
+
+    if (hapi === 0) {
+      if (text.toLowerCase().includes("shqip")) {
+        hapi = 1;
+        bot("Shkëlqyeshëm 😊 Më thuaj një gjë të mirë dhe një të keqe që të ndodhi sot.");
+      } else {
+        bot("Të lutem shkruaj: Shqip");
+      }
+      return;
+    }
+
+    if (hapi === 1) {
+      if (!eshteNgjarjeSot(text)) {
+        bot("Më trego diçka që të ka ndodhur sot 🙂");
+        return;
+      }
+      hapi = 2;
+      bot("Faleminderit 🤍 Tani mund të më pyesësh për sintaksën e shqipes.");
+      return;
+    }
+
+    if (hapi === 2) {
+      const thinking = document.createElement("div");
+      thinking.className = "thinking";
+      thinking.textContent = "Asistenti Digjital: Duke menduar...";
+      messages.appendChild(thinking);
+
+      setTimeout(() => {
+        messages.removeChild(thinking);
+        bot(pergjigjeSintakse(text));
+      }, 2500);
+    }
+  }
+</script>
+
+</body>
+</html>
