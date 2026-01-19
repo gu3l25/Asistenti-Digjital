@@ -1,44 +1,41 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Asistenti Digjital</title>
 
   <style>
+      /* BODY – lejon scroll */
       body {
           margin: 0;
           font-family: Arial, sans-serif;
           background: #07162e;
           min-height: 100vh;
+          overflow-y: auto;
       }
 
-      /* Overlay */
+      /* Overlay – CENTER */
       #overlay {
-          position: fixed;
-          inset: 0;
-          background: #07162e;
+          min-height: 100vh;
           display: flex;
           justify-content: center;
           align-items: center;
-          z-index: 1;
       }
 
-      /* Button New Chat */
+      /* New Chat Button */
       #newChat {
           position: fixed;
-          top: 15px;
-          left: 15px;
+          top: 20px;
+          left: 20px;
           background: #0b2a5a;
           color: white;
           border: none;
-          padding: 10px 14px;
-          border-radius: 6px;
+          padding: 14px 20px;
+          border-radius: 8px;
           cursor: pointer;
-          font-size: 14px;
+          font-size: 16px;
           z-index: 10;
       }
-
       #newChat:hover {
           background: #12408a;
       }
@@ -46,78 +43,60 @@
       /* Credit */
       #credit {
           position: fixed;
-          bottom: 10px;
-          right: 15px;
-          font-size: 12px;
+          bottom: 15px;
+          right: 20px;
+          font-size: 14px;
           color: #b5c7e3;
-          opacity: 0.9;
-          z-index: 10;
       }
 
-      /* Chat box */
+      /* Chat box – gjithmonë në mes */
       #chat {
-          width: 90%;
-          max-width: 420px;
+          width: 900px;
+          max-width: 90vw;
           background: #0b1f3f;
-          padding: 15px;
-          border-radius: 10px;
-          box-sizing: border-box;
-          text-align: center;
+          padding: 25px;
+          border-radius: 14px;
+          box-shadow: 0 0 40px rgba(0,0,0,0.5);
           color: white;
-          box-shadow: 0 0 25px rgba(0,0,0,0.4);
+          display: flex;
+          flex-direction: column;
       }
 
-      #chat img {
-          max-width: 120px;
-          margin-bottom: 10px;
-          border-radius: 10px;
+      /* Title */
+      #chat h3 {
+          font-size: 26px;
+          margin-bottom: 15px;
       }
 
+      /* Messages – scroll brenda */
       #messages {
-          height: 300px;
-          max-height: 50vh;
-          background: #06152d;
-          border: 1px solid #1d3f75;
-          padding: 10px;
+          flex: 1;
+          background: #1d3f75;
+          border-radius: 10px;
+          padding: 18px;
           overflow-y: auto;
-          margin-bottom: 10px;
-          text-align: left;
-          border-radius: 6px;
+          margin-bottom: 15px;
+          font-size: 18px;
       }
 
-      .user { color: #4da3ff; margin: 6px 0; }
-      .bot { color: #5cff9d; margin: 6px 0; }
-      .thinking { color: #aaa; font-style: italic; margin: 6px 0; }
+      /* Messages style */
+      .user { color: #4da3ff; margin: 10px 0; }
+      .bot { color: #ffffff; margin: 10px 0; }
+      .thinking { color: #ccc; font-style: italic; }
 
-      input {
+      /* Input */
+      #input {
           width: 100%;
-          padding: 10px;
-          border-radius: 6px;
+          padding: 16px;
+          font-size: 18px;
+          border-radius: 10px;
           border: none;
           outline: none;
-          box-sizing: border-box;
           background: #102a52;
           color: white;
-          font-size: 16px;
       }
-
-      input::placeholder {
+      #input::placeholder {
           color: #9fb6dd;
-      }
-
-      /* Responsive font sizes for mobile */
-      @media (max-width: 480px) {
-          #chat h3 {
-              font-size: 18px;
-          }
-          input {
-              font-size: 14px;
-              padding: 8px;
-          }
-          #newChat {
-              font-size: 12px;
-              padding: 8px 10px;
-          }
       }
   </style>
 </head>
@@ -129,10 +108,9 @@
 
 <div id="overlay">
   <div id="chat">
-
     <h3>Asistenti Digjital 🤖</h3>
     <div id="messages"></div>
-    <input id="input" placeholder="Cfare do te dish?" autocomplete="off" />
+    <input id="input" placeholder="Çfarë do të dish?" autocomplete="off">
   </div>
 </div>
 
@@ -150,17 +128,17 @@
   newChat.onclick = () => {
     messages.innerHTML = "";
     hapi = 0;
-    bot("Përshëndetje! Çfarë gjuhe preferon? (Shqip)");
+    bot("Përshëndetje! Çfarë gjuhe preferon?");
   };
 
   window.onload = () => {
-    bot("Përshëndetje! Çfarë gjuhe preferon? (Shqip)");
+    bot("Përshëndetje! Çfarë gjuhe preferon?");
   };
 
   function bot(text) {
     const div = document.createElement("div");
     div.className = "bot";
-    div.innerHTML = "<b>Asistenti Digjital:</b> " + text;
+    div.innerHTML = "<b>Asistenti Digjital:</b><br>" + text.replace(/\n/g,"<br>");
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
   }
@@ -180,15 +158,56 @@
 
   function pergjigjeSintakse(text) {
     text = text.toLowerCase();
+
     if (text.includes("kryefjala"))
-      return "Kryefjala tregon kush ose çfarë kryen veprimin. Shembull: Nxënësi lexon librin.";
+      return "Kryefjala është gjymtyra kryesore e fjalisë që shënon frymorin a sendin i cili kryen veprimin ose që ka tiparin e shprehur nga kallëzuesi.\n" +
+        "\n" +
+        "Kryefjala shprehet:\n" +
+        "a) me emër – Shiu vazhdonte të binte lehtë e gëzueshëm.\n" +
+        "b) me përemër – Lirinë nuk ua solla unë, po e gjeta në mes jush.\n" +
+        "c) me grup emëror – Midis reve, herë pas here ndriçonte tokën dielli pranveror.\n" +
+        "d) me pjesë të nënrenditur ftilluese – Mendohet se ky qytet është një vendbanim i lashtë.\n";
+
     if (text.includes("kallëzuesi") || text.includes("kallezuesi"))
-      return "Kallëzuesi tregon veprimin ose gjendjen. Shembull: Nxënësi lexon librin.";
+      return "1) Ç’është kallëzuesi?\n" +
+        "Kallëzuesi është gjymtyra kryesore e fjalisë që tregon një veprim a një gjendje të kryefjalës.\n" +
+        "Klasifikimi i kallëzuesve sipas mënyrës së shprehjes:\n" +
+        "⦁\tKallëzues emëror – Ai është njeri i besës.\n" +
+        "Mënyra e formimit: folja ‘jam/është- këpuja’  + gjymtyra emërore ‘njeri i besës’ (GE).\n" +
+        "⦁\tKallëzues i thjeshtë foljor – Drita e mëngjesit po mbulonte tokën e përgjumur.\n" +
+        "Mënyra e formimit: folje në kohët e thjeshta ose kohë të përbëra.\n" +
+        "⦁\tKallëzues i përbërë foljor – Ajo filloi të shkruante librin e parë.\n" +
+        "Mënyra e formimit: \n" +
+        "⦁\tfolje aspektore që tregojnë fillim, vazhdim, mbarim të veprimit (filloj, zë, nis, vazhdoj, vijoj, mbaroj, përfundoj…) ose folje modale (mund, duhet, do).\n" +
+        "⦁\tpasohet nga një tjetër folje në lidhore (të shkruante), forma të pashtjelluara ose emra prejfoljor asnjanës.\n";
+
     if (text.includes("kundrinori"))
       return "Kundrinori tregon mbi kë ose mbi çfarë bie veprimi.";
+
+    if (text.includes("përcaktori") || text.includes("percaktori"))
+      return "Përcaktori është gjymtyrë e dytë e fjalisë, pjesë e grupit emëror.\n" +
+        "Llojet e përcaktorëve - mënyrat e shprehjes.\n" +
+        "Përcaktori me përshtatje - përshtatet me emrin bërthamë në gjini, numër, rasë.\n" +
+        "Shprehet:\n" +
+        "a) me mbiemër – Uji po rridhte me një zhurmë ritmike.\n" +
+        "b) me përemër – Motra e saj fliste aq bukur!\n" +
+        "c) me numëror – Ata janë tre shokë të mirë.\n" +
+        "Përcaktori me drejtim\n" +
+        "Shprehet:\n" +
+        "a)\tMe emër në rasën emërore me parafjalë - Vajza nga Tirana fitoi vendin e parë në konkurs.\n" +
+        "b)\tMe emër në rasën gjinore – Vargu i njerëzve nuk kishte të mbaruar.\n" +
+        "c)\tMe emër në rasën kallëzore me ose pa parafjalë - Në mbrëmje shijova një gotë verë me miqtë e mi. Kisha kohë pa shijuar një mot me diell.\n" +
+        "d)\tMe emër në rasën rrjedhore me ose pa parafjalë -  - Ajo dukej e brishtë si një gotë kristali.  Shtëpia prej guri është e gjyshes sime.\n" +
+        "Përcaktori me bashkim\n" +
+        "Shprehet:\n" +
+        "a) me formë të pashtjelluar pjesore – Dy aktorë mbuluar me pelerina filluan të dialogonin.\n" +
+        "b) me formë të pashtjelluar paskajore – Dëshira për të studiuar ishte e ethshme. \n" +
+        "c) me ndajfolje – Klasa përballë është e motrës sime.\n";
+
     if (text.includes("fjalia"))
       return "Fjalia është një grup fjalësh që shpreh një mendim të plotë.";
-    return "Mund të më pyesësh për kryefjalën, kallëzuesin, kundrinorin ose fjalinë 😊";
+
+    return "Mund të më pyesësh për kryefjalën, kallëzuesin, ose përcaktorin 😊";
   }
 
   function sendMessage() {
@@ -214,7 +233,7 @@
         return;
       }
       hapi = 2;
-      bot("Faleminderit 🤍 Tani mund të më pyesësh për sintaksën e shqipes.");
+      bot("Faleminderit 🤍 Tani mund të bësh pyetje rreth sintaksës.");
       return;
     }
 
@@ -227,7 +246,7 @@
       setTimeout(() => {
         messages.removeChild(thinking);
         bot(pergjigjeSintakse(text));
-      }, 2500);
+      }, 1200);
     }
   }
 </script>
